@@ -1,6 +1,6 @@
 name: CI with Caching
 
-on: 
+on:
   push:
     branches: [ "main" ]
   workflow_dispatch:
@@ -10,30 +10,37 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Step 1: Checkout repository
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # Step 2: Set up Python
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.11"
 
+      # Step 3: Create virtual environment
       - name: Create virtual environment
         run: python -m venv venv
 
+      # Step 4: Cache dependencies
       - name: Cache dependencies
-        uses: actions/cache@v4
         id: cache-deps
+        uses: actions/cache@v4
         with:
           path: ~/.cache/pip
           key: cache-bbe2920
 
+      # Step 5: Install dependencies
       - name: Install dependencies
         run: |
           source venv/bin/activate
           pip install -r requirements.txt
 
+      # Step 6: Prime cache
       - name: prime-cache-bbe2920
+        shell: bash
         run: |
           if [[ "${{ steps.cache-deps.outputs.cache-hit }}" == "true" ]]; then
             echo "Cache hit! Dependencies were restored."
