@@ -1,6 +1,6 @@
 name: CI with Caching
 
-on:
+on: 
   push:
     branches: [ "main" ]
   workflow_dispatch:
